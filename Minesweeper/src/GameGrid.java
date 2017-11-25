@@ -12,6 +12,7 @@ public class GameGrid extends JPanel {
     private Integer[][] board;
     private ArrayList<Point> mineCoordinates;
     private int length, width;
+    private boolean gameOver;
 
     public GameGrid(int width, int length, int mineCount)
     {
@@ -19,6 +20,8 @@ public class GameGrid extends JPanel {
         this.width = width;
         board = new Integer[width][length];
         mineCoordinates = new ArrayList<>();
+        this.gameOver = false;
+
 
         for(int i = 0; i < width; i++)
         {
@@ -54,6 +57,11 @@ public class GameGrid extends JPanel {
         }
     }
 
+    public boolean isGameOver()
+    {
+        return gameOver;
+    }
+
     public int getValue(int x, int y)
     {
         if(isValidSpace(x, y))
@@ -84,14 +92,14 @@ public class GameGrid extends JPanel {
 
     public boolean mineAtPoint(int x, int y)
     {
-        if(x < 0 || x > this.width)
-        {
-            throw new InvalidParameterException("Point is outside grid (x)!");
-        }
-        if(y < 0 || y > this.length)
-        {
-            throw new InvalidParameterException("Point is outside grid (y)!");
-        }
+//        if(x < 0 || x > this.width)
+//        {
+//            throw new InvalidParameterException("Point is outside grid (x)!");
+//        }
+//        if(y < 0 || y > this.length)
+//        {
+//            throw new InvalidParameterException("Point is outside grid (y)!");
+//        }
 
         Point test = new Point(x, y);
         if(mineCoordinates.contains(test))
