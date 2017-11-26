@@ -75,6 +75,13 @@ public class GameView extends JFrame {
 
                         if(SwingUtilities.isLeftMouseButton(e))
                         {
+                            // Prevents loss on first click
+                            if(grid.getMineCoordinates().isEmpty())
+                            {
+                                Point p = new Point(button.getxLoc(),button.getyLoc());
+                                grid.generateMines(p);
+                            }
+
                             if(!grid.isGameOver() && !button.isFlagged())
                             {
                                 System.out.println(button.getxLoc() + "," + button.getyLoc());

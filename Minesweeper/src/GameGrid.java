@@ -12,7 +12,7 @@ public class GameGrid extends JPanel {
 
     private Integer[][] board;
     private ArrayList<Point> mineCoordinates;
-    private int length, width;
+    private int length, width, mineCount;
     private boolean gameOver;
     private Hashtable<Point, Space> spaces;
 
@@ -20,6 +20,7 @@ public class GameGrid extends JPanel {
     {
         this.length = length;
         this.width = width;
+        this.mineCount = mineCount;
         board = new Integer[width][length];
         mineCoordinates = new ArrayList<>();
         this.gameOver = false;
@@ -34,30 +35,6 @@ public class GameGrid extends JPanel {
             }
         }
 
-        // initialize mines into grid
-        for(int i = 0; i < mineCount; i++)
-        {
-            int potX = ThreadLocalRandom.current().nextInt(0, width);
-            int potY = ThreadLocalRandom.current().nextInt(0, length );
-
-            while(board[potX][potY] == -1)
-            {
-                potX = ThreadLocalRandom.current().nextInt(0, width);
-                potY = ThreadLocalRandom.current().nextInt(0, length);
-            }
-            Point mine = new Point(potX, potY);
-            mineCoordinates.add(mine);
-            board[potX][potY] = -1;
-        }
-
-        // Set values for each space
-        for(int i = 0; i < width; i++)
-        {
-            for(int j = 0; j < length; j++)
-            {
-                board[i][j] = setSpaceValue(i,j);
-            }
-        }
     }
 
     public void addSpace(Point p, Space space)
@@ -245,6 +222,47 @@ public class GameGrid extends JPanel {
             return false;
         }
         return true;
+    }
+
+    // Randomly generates mines while giving the user a safe start of a 3x3 grid around where they click
+    public void generateMines(Point startPoint)
+    {
+        int startX = (int) startPoint.getX();
+        int startY = (int) startPoint.getY();
+
+        // initialize mines into grid
+        for(int i = 0; i < this.mineCount; i++)
+        {
+            int potX = ThreadLocalRandom.current().nextInt(0, width);
+            int potY = ThreadLocalRandom.current().nextInt(0, length );
+
+            while(board[potX][potY] == -1 || inSafeSpace(startX, startY, potX, potY))
+            {
+                potX = ThreadLocalRandom.current().nextInt(0, width);
+                potY = ThreadLocalRandom.current().nextInt(0, length);
+            }
+            Point mine = new Point(potX, potY);
+            mineCoordinates.add(mine);
+            board[potX][potY] = -1;
+        }
+
+        // Set values for each space
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < length; j++)
+            {
+                board[i][j] = setSpaceValue(i,j);
+            }
+        }
+    }
+
+    private boolean inSafeSpace(int startX, int startY, int x, int y)
+    {
+        if(Math.abs(startX - x) < 2 && Math.abs(startY - y) < 2)
+        {
+            return true;
+        }
+        return false;
     }
 
 }
