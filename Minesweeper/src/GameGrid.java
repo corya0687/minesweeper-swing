@@ -62,6 +62,11 @@ public class GameGrid extends JPanel {
         return gameOver;
     }
 
+    public void setGameOver()
+    {
+        this.gameOver = true;
+    }
+
     public int getValue(int x, int y)
     {
         if(isValidSpace(x, y))
@@ -80,6 +85,7 @@ public class GameGrid extends JPanel {
     {
         return width;
     }
+
     public Integer[][] test()
     {
         return board;

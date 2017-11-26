@@ -1,55 +1,42 @@
+import javax.swing.*;
 import java.awt.*;
 
 /**
  * Created by keeferbibby on 11/15/17.
  */
-public class Space extends Point {
+public class Space extends JButton
+{
+    private int xLoc, yLoc;
+    private boolean flagged;
 
-    private int x, y;
-    private boolean mine;
-    private int number;
-
-    public Space(int x, int y)
+    public Space()
     {
-        this.x = x;
-        this.y = y;
-        this.mine = false;
+        this.flagged = false;
     }
 
-    public void setNumber(int number)
+    public boolean isFlagged()
     {
-        this.number = number;
+        return flagged;
     }
 
-    public void setMine(boolean mine)
+    public void setFlagged(boolean flagged)
     {
-        this.mine = mine;
+        this.flagged = flagged;
     }
 
-    public int getNumber()
+    public void setLoc(int xLoc, int yLoc)
     {
-        return this.number;
+        this.xLoc = xLoc;
+        this.yLoc = yLoc;
     }
 
-    public double getX()
+    public int getxLoc()
     {
-        return x;
+        return xLoc;
     }
 
-    public double getY()
+    public int getyLoc()
     {
-        return y;
-    }
-
-    public boolean equals(Space comp)
-    {
-        if(comp.getX() == this.x && comp.getY() == this.y)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return yLoc;
     }
 }
