@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -13,6 +14,7 @@ public class GameGrid extends JPanel {
     private ArrayList<Point> mineCoordinates;
     private int length, width;
     private boolean gameOver;
+    private Hashtable<Point, Space> spaces;
 
     public GameGrid(int width, int length, int mineCount)
     {
@@ -21,6 +23,7 @@ public class GameGrid extends JPanel {
         board = new Integer[width][length];
         mineCoordinates = new ArrayList<>();
         this.gameOver = false;
+        this.spaces = new Hashtable<>();
 
 
         for(int i = 0; i < width; i++)
@@ -57,6 +60,16 @@ public class GameGrid extends JPanel {
         }
     }
 
+    public void addSpace(Point p, Space space)
+    {
+        spaces.put(p, space);
+    }
+
+    public Hashtable<Point, Space> getSpaces()
+    {
+        return spaces;
+    }
+
     public boolean isGameOver()
     {
         return gameOver;
@@ -75,6 +88,8 @@ public class GameGrid extends JPanel {
         }
         return 10;
     }
+
+
 
     public int getLength()
     {

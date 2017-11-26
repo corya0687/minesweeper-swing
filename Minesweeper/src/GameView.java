@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Hashtable;
 
 /**
  * Created by keeferbibby on 11/7/17.
@@ -65,6 +66,8 @@ public class GameView extends JFrame {
                                 else
                                 {
                                     button.setFlagged(!button.isFlagged());
+                                    // Place holder flag text
+                                    // TODO: change later.
                                     button.setText("╒");
                                 }
                             }
@@ -80,18 +83,33 @@ public class GameView extends JFrame {
                                 int value = grid.getValue(xVal, yVal);
                                 if(grid.mineAtPoint(xVal, yVal))
                                 {
+                                    grid.setGameOver();
+
+                                    // Game is over show all mine locations
+                                    Hashtable<Point, Space> spaces = grid.getSpaces();
+                                    for(Point p : grid.getMineCoordinates())
+                                    {
+                                        Space mine = spaces.get(p);
+                                        if(!mine.isFlagged())
+                                        {
+                                            System.out.println("boom");
+                                            mine.setText("*");
+                                            mine.setBackground(Color.gray);
+                                            mine.setOpaque(true);
+                                            mine.setBorderPainted(false);
+                                        }
+                                        // Update values in map
+                                        spaces.put(p, mine);
+                                    }
+
+                                    // Update value in map
                                     System.out.println("boom");
                                     button.setText("*");
                                     button.setBackground(Color.RED);
                                     button.setOpaque(true);
                                     button.setBorderPainted(false);
-//                                grid.setGameOver();
-
-                                    // Game is over show all mine locations
-                                    for(Point p : grid.getMineCoordinates())
-                                    {
-
-                                    }
+                                    Point p = new Point(button.getxLoc(), button.getyLoc());
+                                    spaces.put(p, button);
                                 }
                                 else
                                 {
@@ -99,12 +117,18 @@ public class GameView extends JFrame {
                                     button.setOpaque(true);
                                     button.setBorderPainted(false);
                                     button.setText(Integer.toString(value));
+
+                                    // TODO: If 0 explore all adjacent 0's until a non-zero number is found
+                                    if(value == 0)
+                                    {
+
+                                    }
                                 }
                             }
                         }
 
                     }
-                    
+
 
                     @Override
                     public void mouseEntered(MouseEvent e)
@@ -118,21 +142,9 @@ public class GameView extends JFrame {
 
                     }
                 });
-//
-//                button.addActionListener(new ActionListener()
-//                {
-//                    @Override
-//                    public void actionPerformed(ActionEvent e)
-//                    {
-//
-//
-//                    }
-//                });
 
-                if(grid.getValue(i, j) < 0)
-                {
-                    button.setText("");
-                }
+                Point p = new Point(i,j);
+                grid.addSpace(p, button);
 
                 add(button, c);
             }
