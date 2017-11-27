@@ -53,7 +53,6 @@ public class GameView extends JFrame {
                     @Override
                     public void mouseReleased(MouseEvent e)
                     {
-                        System.out.println(e.getButton());
                         if(SwingUtilities.isRightMouseButton(e) || e.getButton() == 3)
                         {
                             if(!grid.isGameOver())
@@ -128,7 +127,16 @@ public class GameView extends JFrame {
                                     // TODO: If 0 explore all adjacent 0's until a non-zero number is found
                                     if(value == 0)
                                     {
-
+                                        for(Space s : grid.explore(button))
+                                        {
+                                            xVal = s.getxLoc();
+                                            yVal = s.getyLoc();
+                                            value = grid.getValue(xVal, yVal);
+                                            s.setBackground(Color.gray);
+                                            s.setOpaque(true);
+                                            s.setBorderPainted(false);
+                                            s.setText(Integer.toString(value));
+                                        }
                                     }
                                 }
                             }

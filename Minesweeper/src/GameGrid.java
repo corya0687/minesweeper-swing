@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -263,6 +264,113 @@ public class GameGrid extends JPanel {
             return true;
         }
         return false;
+    }
+
+    public ArrayList<Space> explore(Space startPoint)
+    {
+        int pointX = startPoint.getxLoc();
+        int pointY = startPoint.getyLoc();
+        ArrayList<Space> explored = new ArrayList<>();
+
+        explored.add(startPoint);
+        if(getValue(pointX, pointY) != 0)
+        {
+            // if space is not a 0 dont explore
+            return explored;
+        }
+        else
+        {
+            // if northWest is valid, explore
+            if(spaces.get(new Point(pointX - 1, pointY - 1)) != null)
+            {
+                Space northWest = spaces.get(new Point(pointX - 1, pointY - 1));
+                explored.addAll(explore(northWest));
+            }
+            // if north is valid, explore
+            if(spaces.get(new Point(pointX, pointY - 1)) != null)
+            {
+                Space north = spaces.get(new Point(pointX, pointY - 1));
+                explored.addAll(explore(north));
+            }
+            // if northEast is valid, explore
+            if(spaces.get(new Point(pointX + 1, pointY - 1)) != null)
+            {
+                Space northEast = spaces.get(new Point(pointX + 1, pointY - 1));
+                explored.addAll(explore(northEast));
+            }
+            // if east is valid, explore
+            if(spaces.get(new Point(pointX + 1, pointY)) != null)
+            {
+                Space east = spaces.get(new Point(pointX + 1, pointY));
+                explored.addAll(explore(east));
+            }
+//            // if southEast is valid, explore
+//            if(spaces.get(new Point(pointX + 1, pointY + 1)) != null)
+//            {
+//                Space southEast = spaces.get(new Point(pointX + 1, pointY + 1));
+//                explored.addAll(explore(southEast));
+//            }
+//            // if south is valid, explore
+//            if(spaces.get(new Point(pointX, pointY + 1)) != null)
+//            {
+//                Space south = spaces.get(new Point(pointX, pointY + 1));
+//                explored.addAll(explore(south));
+//            }
+//            // if southWest is valid, explore
+//            if(spaces.get(new Point(pointX - 1, pointY + 1)) != null)
+//            {
+//                Space southWest = spaces.get(new Point(pointX - 1, pointY + 1));
+//                explored.addAll(explore(southWest));
+//            }
+//            // if west is valid, explore
+//            if(spaces.get(new Point(pointX, pointY)) != null)
+//            {
+//                Space west = spaces.get(new Point(pointX, pointY));
+//                explored.addAll(explore(west));
+//            }
+
+
+
+//            System.out.println(northWest.getxLoc() + "," + northWest.getyLoc());
+//            if(isValidSpace(northWest.getxLoc(), northWest.getyLoc()))
+//            {
+//                explored.addAll(explore(northWest));
+//            }
+
+//            if(isValidSpace(northEast.getxLoc(), northEast.getyLoc()))
+//            {
+//                System.out.println(northEast.getxLoc() + "," + northEast.getyLoc());
+//                explored.addAll(explore(northEast));
+//            }
+//            if(isValidSpace(east.getxLoc(), east.getyLoc()))
+//            {
+//                System.out.println(east.getxLoc() + "," + east.getyLoc());
+//                explored.addAll(explore(east));
+//            }
+//            if(isValidSpace(southEast.getxLoc(), southEast.getyLoc()))
+//            {
+//                System.out.println(southEast.getxLoc() + "," + southEast.getyLoc());
+//                explored.addAll(explore(southEast));
+//            }
+//            if(isValidSpace(south.getxLoc(), south.getyLoc()))
+//            {
+//                System.out.println(south.getxLoc() + "," + south.getyLoc());
+//                explored.addAll(explore(south));
+//            }
+//            if(isValidSpace(southWest.getxLoc(), southWest.getyLoc()))
+//            {
+//                System.out.println(southWest.getxLoc() + "," + southWest.getyLoc());
+//                explored.addAll(explore(southWest));
+//            }
+//            if(isValidSpace(west.getxLoc(), west.getyLoc()))
+//            {
+//                System.out.println(west.getxLoc() + "," + west.getyLoc());
+//                explored.addAll(explore(west));
+//            }
+        }
+
+
+        return explored;
     }
 
 }
