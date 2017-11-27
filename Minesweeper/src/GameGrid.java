@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -18,6 +19,8 @@ public class GameGrid extends JPanel {
     private boolean gameOver;
     private Hashtable<Point, Space> spaces;
     private HashSet<Space> explored;
+    private HashSet<Space> flagged;
+    private Time start, end;
 
 
     public GameGrid(int width, int length, int mineCount)
@@ -40,6 +43,21 @@ public class GameGrid extends JPanel {
             }
         }
 
+    }
+
+    public int getExplorableSpacesCount()
+    {
+        return this.length * this.width - this.mineCount;
+    }
+
+    public void addExplored(Space space)
+    {
+        explored.add(space);
+    }
+
+    public HashSet<Space> getExplored()
+    {
+        return explored;
     }
 
     public void addSpace(Point p, Space space)
@@ -95,15 +113,6 @@ public class GameGrid extends JPanel {
 
     public boolean mineAtPoint(int x, int y)
     {
-//        if(x < 0 || x > this.width)
-//        {
-//            throw new InvalidParameterException("Point is outside grid (x)!");
-//        }
-//        if(y < 0 || y > this.length)
-//        {
-//            throw new InvalidParameterException("Point is outside grid (y)!");
-//        }
-
         Point test = new Point(x, y);
         if(mineCoordinates.contains(test))
         {

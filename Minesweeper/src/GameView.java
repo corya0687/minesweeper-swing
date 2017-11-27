@@ -14,7 +14,7 @@ public class GameView extends JFrame {
     public GameView(String title)
     {
         super(title);
-        GameGrid grid = new GameGrid(9,9, 10);
+        GameGrid grid = new GameGrid(10,10, 15);
 
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -29,7 +29,8 @@ public class GameView extends JFrame {
                 Space button = new Space();
                 button.setMargin(new Insets(0, 0, 0, 0));
                 button.setLoc(i, j);
-                button.setPreferredSize(new Dimension(30,30));
+                button.setPreferredSize(new Dimension(53,40));
+
 //                button.setMaximumSize(new Dimension(50,50));
                 button.addMouseListener(new MouseListener()
                 {
@@ -121,21 +122,42 @@ public class GameView extends JFrame {
                                     button.setBorderPainted(false);
                                     button.setText(Integer.toString(value));
 
-                                    // TODO: If 0 explore all adjacent 0's until a non-zero number is found
+                                    // if 0 explore adjacent spaces until non 0 value is found
+                                    for(Space s : grid.explore(button))
+                                    {
+                                        xVal = s.getxLoc();
+                                        yVal = s.getyLoc();
+                                        value = grid.getValue(xVal, yVal);
+                                        s.setBackground(Color.gray);
+                                        s.setOpaque(true);
+                                        s.setBorderPainted(false);
+                                        s.setText(Integer.toString(value));
+                                    }
                                     if(value == 0)
                                     {
-                                        for(Space s : grid.explore(button))
-                                        {
-                                            xVal = s.getxLoc();
-                                            yVal = s.getyLoc();
-                                            value = grid.getValue(xVal, yVal);
-                                            s.setBackground(Color.gray);
-                                            s.setOpaque(true);
-                                            s.setBorderPainted(false);
-                                            s.setText(Integer.toString(value));
-                                        }
                                     }
                                 }
+                            }
+
+                            // If all non minespaces have been explored win condition is met.
+                            System.out.println(grid.getExplored().size() + " || " + grid.getExplorableSpacesCount());
+
+                            if(grid.getExplored().size() == grid.getExplorableSpacesCount())
+                            {
+                                grid.setGameOver();
+
+                                System.out.println("you win");
+                                for(Space s : grid.getExplored())
+                                {
+                                    s.setBackground(Color.GREEN);
+                                }
+                                for(Point s : grid.getMineCoordinates())
+                                {
+                                    Space mine = grid.getSpaces().get(s);
+                                    mine.setBackground(Color.gray);
+                                }
+                                JPopupMenu winMenu =
+
                             }
                         }
 

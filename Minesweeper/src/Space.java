@@ -6,7 +6,7 @@ import java.awt.*;
  */
 public class Space extends JButton
 {
-    private int xLoc, yLoc;
+    private int xLoc, yLoc, value;
     private boolean flagged;
 
     public Space()
@@ -28,6 +28,11 @@ public class Space extends JButton
     {
         this.xLoc = xLoc;
         this.yLoc = yLoc;
+    }
+
+    public void setValue(int value)
+    {
+        this.value = value;
     }
 
     public int getxLoc()
