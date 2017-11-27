@@ -11,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Minesweeper$Main.coverage" NAME="Main Coverage Results" MODIFIED="1511484526728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/Minesweeper$Main.coverage" NAME="Main Coverage Results" MODIFIED="1511811048614" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -42,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameView.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GameView.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GameView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="27" column="13" lean-forward="false" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+            <state relative-caret-position="90">
+              <caret line="33" column="59" lean-forward="true" selection-start-line="33" selection-start-column="59" selection-end-line="33" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -54,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameGrid.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GameGrid.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameGrid.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="404" column="17" lean-forward="true" selection-start-line="404" selection-start-column="17" selection-end-line="404" selection-end-column="17" />
+            <state relative-caret-position="165">
+              <caret line="272" column="50" lean-forward="false" selection-start-line="272" selection-start-column="50" selection-end-line="272" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -93,6 +93,7 @@
     <findStrings>
       <find>gameOver</find>
       <find>mine</find>
+      <find>explored.addAll</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -111,8 +112,8 @@
         <option value="$PROJECT_DIR$/src/Mine.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/Space.java" />
-        <option value="$PROJECT_DIR$/src/GameView.java" />
         <option value="$PROJECT_DIR$/src/GameGrid.java" />
+        <option value="$PROJECT_DIR$/src/GameView.java" />
       </list>
     </option>
   </component>
@@ -183,7 +184,7 @@
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="full.screen.before.presentation.mode" value="false" />
   </component>
@@ -662,12 +663,12 @@
       <option name="presentableId" value="Default" />
       <updated>1510083786660</updated>
       <workItem from="1510083790927" duration="2489000" />
-      <workItem from="1510531254242" duration="50978000" />
+      <workItem from="1510531254242" duration="52917000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53467000" />
+    <option name="totallyTimeSpent" value="55406000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -824,20 +825,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameView.java">
+    <entry file="file://$PROJECT_DIR$/src/GameGrid.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="27" column="13" lean-forward="false" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+        <state relative-caret-position="165">
+          <caret line="272" column="50" lean-forward="false" selection-start-line="272" selection-start-column="50" selection-end-line="272" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameGrid.java">
+    <entry file="file://$PROJECT_DIR$/src/GameView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="404" column="17" lean-forward="true" selection-start-line="404" selection-start-column="17" selection-end-line="404" selection-end-column="17" />
+        <state relative-caret-position="90">
+          <caret line="33" column="59" lean-forward="true" selection-start-line="33" selection-start-column="59" selection-end-line="33" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -14,7 +14,7 @@ public class GameView extends JFrame {
     public GameView(String title)
     {
         super(title);
-        GameGrid grid = new GameGrid(9,9, 3);
+        GameGrid grid = new GameGrid(9,9, 10);
 
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -25,14 +25,11 @@ public class GameView extends JFrame {
             {
                 c.gridx = i;
                 c.gridy = j;
-//                String test = String.valueOf(grid.getValue(i, j));
-//                String test = i + "," + j;
-
 
                 Space button = new Space();
                 button.setMargin(new Insets(0, 0, 0, 0));
                 button.setLoc(i, j);
-//                button.setPreferredSize(new Dimension(30,30));
+                button.setPreferredSize(new Dimension(30,30));
 //                button.setMaximumSize(new Dimension(50,50));
                 button.addMouseListener(new MouseListener()
                 {
@@ -100,7 +97,7 @@ public class GameView extends JFrame {
                                         {
                                             System.out.println("boom");
                                             mine.setText("*");
-                                            mine.setBackground(Color.gray);
+                                            mine.setBackground(Color.pink);
                                             mine.setOpaque(true);
                                             mine.setBorderPainted(false);
                                         }
@@ -127,7 +124,7 @@ public class GameView extends JFrame {
                                     // TODO: If 0 explore all adjacent 0's until a non-zero number is found
                                     if(value == 0)
                                     {
-                                        for(Space s : grid.explore(button, button))
+                                        for(Space s : grid.explore(button))
                                         {
                                             xVal = s.getxLoc();
                                             yVal = s.getyLoc();

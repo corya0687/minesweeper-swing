@@ -3,6 +3,7 @@ import java.awt.*;
 import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -16,6 +17,8 @@ public class GameGrid extends JPanel {
     private int length, width, mineCount;
     private boolean gameOver;
     private Hashtable<Point, Space> spaces;
+    private HashSet<Space> explored;
+
 
     public GameGrid(int width, int length, int mineCount)
     {
@@ -26,6 +29,7 @@ public class GameGrid extends JPanel {
         mineCoordinates = new ArrayList<>();
         this.gameOver = false;
         this.spaces = new Hashtable<>();
+        this.explored = new HashSet<>();
 
 
         for(int i = 0; i < width; i++)
@@ -266,35 +270,35 @@ public class GameGrid extends JPanel {
         return false;
     }
 
-    public ArrayList<Space> explore(Space startPoint, Space origin)
+    public HashSet<Space> explore(Space startPoint)
     {
         int pointX = startPoint.getxLoc();
         int pointY = startPoint.getyLoc();
-        ArrayList<Space> explored = new ArrayList<>();
         int xDir, yDir;
 
-        explored.add(startPoint);
+        if(explored.contains(startPoint))
+        {
+            return explored;
+        }
+        else
+        {
+            explored.add(startPoint);
+        }
+
         if(getValue(pointX, pointY) != 0)
         {
             // if space is not a 0 dont explore
             return explored;
         }
-        // if point with xDir and yDir modifiers (next space) is valid and exists, explore
+
         xDir = 1;
         yDir = 0;
         if(isValidSpace(pointX + xDir, pointY + yDir))
         {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
+            if(spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
             {
-                Space nextPoint = spaces.get(new Point(pointX + xDir, pointY - yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    if(nextPoint.getxLoc() > origin.getxLoc() && nextPoint.getyLoc() == origin.getyLoc())
-                    {
-                        explored.addAll(explore(nextPoint, startPoint));
-                    }
-                }
+                Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
+                explored.addAll(explore(nextPoint));
             }
         }
 
@@ -302,17 +306,10 @@ public class GameGrid extends JPanel {
         yDir = 0;
         if(isValidSpace(pointX + xDir, pointY + yDir))
         {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
+            if(spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
             {
-                Space nextPoint = spaces.get(new Point(pointX + xDir, pointY - yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    if(nextPoint.getxLoc() < origin.getxLoc() && nextPoint.getyLoc() == origin.getyLoc())
-                    {
-                        explored.addAll(explore(nextPoint, startPoint));
-                    }
-                }
+                Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
+                explored.addAll(explore(nextPoint));
             }
         }
 
@@ -320,17 +317,10 @@ public class GameGrid extends JPanel {
         yDir = 1;
         if(isValidSpace(pointX + xDir, pointY + yDir))
         {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
+            if(spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
             {
                 Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    if(nextPoint.getyLoc() > origin.getyLoc() && nextPoint.getxLoc() == origin.getxLoc())
-                    {
-                        explored.addAll(explore(nextPoint, startPoint));
-                    }
-                }
+                explored.addAll(explore(nextPoint));
             }
         }
 
@@ -338,17 +328,10 @@ public class GameGrid extends JPanel {
         yDir = -1;
         if(isValidSpace(pointX + xDir, pointY + yDir))
         {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
+            if(spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
             {
                 Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    if(nextPoint.getyLoc() < origin.getyLoc() && nextPoint.getxLoc() == origin.getxLoc())
-                    {
-                        explored.addAll(explore(nextPoint, startPoint));
-                    }
-                }
+                explored.addAll(explore(nextPoint));
             }
         }
 
@@ -356,17 +339,10 @@ public class GameGrid extends JPanel {
         yDir = 1;
         if(isValidSpace(pointX + xDir, pointY + yDir))
         {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
+            if(spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
             {
                 Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    if(nextPoint.getyLoc() > origin.getyLoc() && nextPoint.getxLoc() > origin.getxLoc())
-                    {
-                        explored.addAll(explore(nextPoint, startPoint));
-                    }
-                }
+                explored.addAll(explore(nextPoint));
             }
         }
 
@@ -374,35 +350,10 @@ public class GameGrid extends JPanel {
         yDir = -1;
         if(isValidSpace(pointX + xDir, pointY + yDir))
         {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
+            if(spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
             {
                 Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    if(nextPoint.getyLoc() < origin.getyLoc() && nextPoint.getxLoc() < origin.getxLoc())
-                    {
-                        explored.addAll(explore(nextPoint, startPoint));
-                    }
-                }
-            }
-        }
-
-        xDir = 1;
-        yDir = -1;
-        if(isValidSpace(pointX + xDir, pointY + yDir))
-        {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
-            {
-                Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    if(nextPoint.getyLoc() < origin.getyLoc() && nextPoint.getxLoc() > origin.getxLoc())
-                    {
-                        explored.addAll(explore(nextPoint, startPoint));
-                    }
-                }
+                explored.addAll(explore(nextPoint));
             }
         }
 
@@ -410,84 +361,24 @@ public class GameGrid extends JPanel {
         yDir = 1;
         if(isValidSpace(pointX + xDir, pointY + yDir))
         {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
+            if(spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
             {
                 Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    if(nextPoint.getyLoc() > origin.getyLoc() && nextPoint.getxLoc() < origin.getxLoc())
-                    {
-                        explored.addAll(explore(nextPoint, startPoint));
-                    }
-                }
+                explored.addAll(explore(nextPoint));
             }
         }
 
-
-        return explored;
-
-//        explored.add(startPoint);
-//        if(getValue(pointX, pointY) != 0)
-//        {
-//            // if space is not a 0 dont explore
-//            return explored;
-//        }
-//        else
-//        {
-//            explored.addAll(recExplore(startPoint, 0, 1));
-//            explored.addAll(recExplore(startPoint, 1, 1));
-//            explored.addAll(recExplore(startPoint, 1, 0));
-//            explored.addAll(recExplore(startPoint, 1, -1));
-//            explored.addAll(recExplore(startPoint, 0, -1));
-//            explored.addAll(recExplore(startPoint, -1, -1));
-//            explored.addAll(recExplore(startPoint, -1, 0));
-//            explored.addAll(recExplore(startPoint, -1, 1));
-//
-//
-//
-//        }
-//        return explored;
-
-
-    }
-
-    private ArrayList<Space> recExplore(Space startPoint, int xDir, int yDir)
-    {
-        ArrayList<Space> explored = new ArrayList<>();
-        if(startPoint == null)
-        {
-            return explored;
-        }
-
-        int pointX = startPoint.getxLoc();
-        int pointY = startPoint.getyLoc();
-
-        if(!isValidSpace(pointX, pointY))
-        {
-            return explored;
-        }
-
-
-        explored.add(startPoint);
-        if(getValue(pointX, pointY) != 0)
-        {
-            // if space is not a 0 dont explore
-            return explored;
-        }
-        // if point with xDir and yDir modifiers (next space) is valid and exists, explore
+        xDir = 1;
+        yDir = -1;
         if(isValidSpace(pointX + xDir, pointY + yDir))
         {
-            if (spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
+            if(spaces.get(new Point(pointX + xDir, pointY + yDir)) != null)
             {
-                Space nextPoint = spaces.get(new Point(pointX + xDir, pointY - yDir));
-                System.out.println(nextPoint.getxLoc() + "," + nextPoint.getyLoc());
-                if (isValidSpace(nextPoint.getxLoc(), nextPoint.getyLoc()))
-                {
-                    explored.addAll(recExplore(nextPoint, xDir, yDir));
-                }
+                Space nextPoint = spaces.get(new Point(pointX + xDir, pointY + yDir));
+                explored.addAll(explore(nextPoint));
             }
         }
+
         return explored;
     }
 
