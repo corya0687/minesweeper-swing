@@ -14,7 +14,7 @@ public class GameView extends JFrame {
     public GameView(String title)
     {
         super(title);
-        GameGrid grid = new GameGrid(9,9, 9);
+        GameGrid grid = new GameGrid(9,9, 3);
 
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -127,7 +127,7 @@ public class GameView extends JFrame {
                                     // TODO: If 0 explore all adjacent 0's until a non-zero number is found
                                     if(value == 0)
                                     {
-                                        for(Space s : grid.explore(button))
+                                        for(Space s : grid.explore(button, button))
                                         {
                                             xVal = s.getxLoc();
                                             yVal = s.getyLoc();
