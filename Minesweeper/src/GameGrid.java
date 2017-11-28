@@ -296,7 +296,7 @@ public class GameGrid extends JPanel {
 
         if(getValue(pointX, pointY) != 0)
         {
-            // if space is not a 0 dont explore
+            // if space is not a 0 stop exploring
             return explored;
         }
 
@@ -389,6 +389,82 @@ public class GameGrid extends JPanel {
         }
 
         return explored;
+    }
+
+    public ArrayList<Space> getAdjacentSpaces(Space s)
+    {
+        int xLoc = s.getxLoc();
+        int yLoc = s.getyLoc();
+        int xDir;
+        int yDir;
+        ArrayList<Space> adjacentSpaces = new ArrayList<>();
+
+        xDir = 1;
+        yDir = 0;
+        if(isValidSpace(xLoc + xDir, yLoc + yDir))
+        {
+            adjacentSpaces.add(spaces.get(new Point(xLoc + xDir, yLoc + yDir)));
+        }
+
+        xDir = -1;
+        yDir = 0;
+        if(isValidSpace(xLoc + xDir, yLoc + yDir))
+        {
+            adjacentSpaces.add(spaces.get(new Point(xLoc + xDir, yLoc + yDir)));
+        }
+
+        xDir = 0;
+        yDir = 1;
+        if(isValidSpace(xLoc + xDir, yLoc + yDir))
+        {
+            adjacentSpaces.add(spaces.get(new Point(xLoc + xDir, yLoc + yDir)));
+        }
+
+        xDir = 0;
+        yDir = -1;
+        if(isValidSpace(xLoc + xDir, yLoc + yDir))
+        {
+            adjacentSpaces.add(spaces.get(new Point(xLoc + xDir, yLoc + yDir)));
+        }
+
+        xDir = 1;
+        yDir = 1;
+        if(isValidSpace(xLoc + xDir, yLoc + yDir))
+        {
+            adjacentSpaces.add(spaces.get(new Point(xLoc + xDir, yLoc + yDir)));
+        }
+
+        xDir = -1;
+        yDir = -1;
+        if(isValidSpace(xLoc + xDir, yLoc + yDir))
+        {
+            adjacentSpaces.add(spaces.get(new Point(xLoc + xDir, yLoc + yDir)));
+        }
+
+        xDir = -1;
+        yDir = 1;
+        if(isValidSpace(xLoc + xDir, yLoc + yDir))
+        {
+            adjacentSpaces.add(spaces.get(new Point(xLoc + xDir, yLoc + yDir)));
+        }
+
+        xDir = 1;
+        yDir = -1;
+        if(isValidSpace(xLoc + xDir, yLoc + yDir))
+        {
+            adjacentSpaces.add(spaces.get(new Point(xLoc + xDir, yLoc + yDir)));
+        }
+
+        return adjacentSpaces;
+    }
+
+    public boolean isExplored(Space s)
+    {
+        if(explored.contains(s))
+        {
+            return true;
+        }
+        return false;
     }
 
 }
