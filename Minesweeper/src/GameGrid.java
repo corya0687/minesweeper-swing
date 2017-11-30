@@ -287,6 +287,11 @@ public class GameGrid extends JPanel {
 
         if(explored.contains(startPoint))
         {
+            if(getValue(startPoint.getxLoc(), startPoint.getyLoc()) == 0)
+            {
+                System.out.println(startPoint.getxLoc() +"," +startPoint.getyLoc());
+                System.out.println(getValue(startPoint.getxLoc(), startPoint.getyLoc()));
+            }
             return explored;
         }
         else
@@ -465,6 +470,27 @@ public class GameGrid extends JPanel {
             return true;
         }
         return false;
+    }
+
+    public void checkWinCondition()
+    {
+        if(getExplored().size() == getExplorableSpacesCount())
+        {
+            setGameOver();
+
+            System.out.println("you win");
+            for(Space s : getExplored())
+            {
+                s.setBackground(Color.GREEN);
+            }
+            for(Point s : getMineCoordinates())
+            {
+                Space mine = getSpaces().get(s);
+                mine.setBackground(Color.gray);
+                mine.setLabelText("*");
+            }
+
+        }
     }
 
 }

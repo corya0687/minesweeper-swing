@@ -10,12 +10,20 @@ import java.util.Hashtable;
 /**
  * Created by keeferbibby on 11/7/17.
  */
-public class GameView extends JFrame {
+public class GameView extends JPanel {
 
-    public GameView(String title)
+    private GameGrid grid;
+
+    public GameView()
     {
-        super(title);
-        GameGrid grid = new GameGrid(16,16, 40);
+        super();
+
+    }
+
+    public void newGame(int length, int width, int mines)
+    {
+        grid = new GameGrid(length, width, mines);
+
 
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -28,9 +36,13 @@ public class GameView extends JFrame {
                 c.gridy = j;
 
                 Space button = new Space();
-                button.setMargin(new Insets(0, 0, 0, 0));
+                Font newTextFont = new Font(button.getFont().getName(), Font.BOLD, 14);
+                button.setTextFont(newTextFont);
+//                button.setMargin(new Insets(0, 0, 0, 0));
                 button.setLoc(i, j);
-                button.setPreferredSize(new Dimension(53,40));
+//                button.setPreferredSize(new Dimension(53,40));
+                button.setPreferredSize(new Dimension(40,40));
+                button.setBorder(BorderFactory.createLineBorder(Color.gray));
 
 //                button.setMaximumSize(new Dimension(50,50));
                 button.addMouseListener(new MouseListener()
@@ -38,6 +50,8 @@ public class GameView extends JFrame {
                     @Override
                     public void mouseClicked(MouseEvent e)
                     {
+                        // Double click to explore if value of button == adjacent flagged spaces
+                        // Explores all non flagged spaces
                         if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
                             System.out.println("double clicked");
                             int xLoc = button.getxLoc();
@@ -45,7 +59,7 @@ public class GameView extends JFrame {
                             int value = grid.getValue(xLoc, yLoc);
                             if(grid.isExplored(button))
                             {
-                                if(value > 0)
+                                if(value >= 0)
                                 {
                                     int adjacentFlagCount = 0;
                                     ArrayList<Space> adjacentSpaces = grid.getAdjacentSpaces(button);
@@ -60,9 +74,9 @@ public class GameView extends JFrame {
                                     {
                                         for(Space s : adjacentSpaces)
                                         {
-                                            System.out.println("yes");
                                             if(!grid.isExplored(s) && !s.isFlagged())
                                             {
+//                                                System.out.println(s.getxLoc() +"," +s.getyLoc());
                                                 if(grid.mineAtPoint(s.getxLoc(), s.getyLoc()))
                                                 {
                                                     int xVal = s.getxLoc();
@@ -70,23 +84,48 @@ public class GameView extends JFrame {
                                                     grid.setGameOver();
                                                     System.out.println("boom");
                                                     s.setBackground(Color.red);
-                                                    s.setOpaque(true);
-                                                    s.setBorderPainted(false);
-                                                    s.setText("*");
+//                                                    s.setOpaque(true);
+//                                                    s.setBorderPainted(false);
+//                                                    s.setText("*");
+                                                    s.setLabelText("*");
                                                 }
                                                 else
                                                 {
-                                                    if(!grid.isExplored(s))
-                                                    {
-                                                        grid.explore(s);
-                                                    }
+                                                    grid.explore(s);
                                                 }
                                             }
+//                                            if(grid.isExplored(s))
+//                                            {
+//                                                int xVal = s.getxLoc();
+//                                                int yVal = s.getyLoc();
+//                                                value = grid.getValue(xVal, yVal);
+//                                                s.setBackground(new Color(200, 200, 200));
+//                                                s.setOpaque(true);
+//                                                s.setBorderPainted(false);
+//                                                s.setColor(value);
+//                                                s.setText(Integer.toString(value));
+//                                            }
                                         }
+                                        for(Space s : grid.getExplored())
+                                        {
+                                            int xVal = s.getxLoc();
+                                            int yVal = s.getyLoc();
+                                            value = grid.getValue(xVal, yVal);
+                                            s.setBackground(new Color(200, 200, 200));
+//                                            s.setOpaque(true);
+                                            s.setColor(value);
+//                                            s.setBorderPainted(false);
+//                                            s.setText(Integer.toString(value));
+                                            s.setLabelText(Integer.toString(value));
+                                        }
+
                                     }
 
                                 }
                             }
+                            System.out.println(grid.getExplored().size() + " || " + grid.getExplorableSpacesCount());
+                            // did you win?
+                            grid.checkWinCondition();
                         }
 
                     }
@@ -109,14 +148,16 @@ public class GameView extends JFrame {
                                 if(button.isFlagged())
                                 {
                                     button.setFlagged(!button.isFlagged());
-                                    button.setText("");
+//                                    button.setText("");
+                                    button.setLabelText("");
                                 }
                                 else
                                 {
                                     button.setFlagged(!button.isFlagged());
                                     // Place holder flag text
                                     // TODO: change later.
-                                    button.setText("╒");
+//                                    button.setText("╒");
+                                    button.setLabelText("╒");
                                 }
                             }
                         }
@@ -132,7 +173,7 @@ public class GameView extends JFrame {
 
                             if(!grid.isGameOver() && !button.isFlagged())
                             {
-                                System.out.println(button.getxLoc() + "," + button.getyLoc());
+//                                System.out.println(button.getxLoc() + "," + button.getyLoc());
                                 int xVal = button.getxLoc();
                                 int yVal = button.getyLoc();
                                 int value = grid.getValue(xVal, yVal);
@@ -150,10 +191,11 @@ public class GameView extends JFrame {
                                         if(!mine.isFlagged())
                                         {
                                             System.out.println("boom");
-                                            mine.setText("*");
+//                                            mine.setText("*");
+                                            mine.setLabelText("*");
                                             mine.setBackground(Color.pink);
-                                            mine.setOpaque(true);
-                                            mine.setBorderPainted(false);
+//                                            mine.setOpaque(true);
+//                                            mine.setBorderPainted(false);
                                         }
                                         // Update values in map
                                         spaces.put(p, mine);
@@ -161,19 +203,20 @@ public class GameView extends JFrame {
 
                                     // Update value in map
                                     System.out.println("boom");
-                                    button.setText("*");
+//                                    button.setText("*");
+                                    button.setLabelText("*");
                                     button.setBackground(Color.RED);
-                                    button.setOpaque(true);
-                                    button.setBorderPainted(false);
+//                                    button.setOpaque(true);
+//                                    button.setBorderPainted(false);
                                     Point p = new Point(button.getxLoc(), button.getyLoc());
                                     spaces.put(p, button);
                                 }
                                 else
                                 {
-                                    button.setBackground(Color.gray);
-                                    button.setOpaque(true);
-                                    button.setBorderPainted(false);
-                                    button.setText(Integer.toString(value));
+//                                    button.setBackground(Color.gray);
+//                                    button.setOpaque(true);
+//                                    button.setBorderPainted(false);
+//                                    button.setText(Integer.toString(value));
 
                                     // if 0 explore adjacent spaces until non 0 value is found
                                     for(Space s : grid.explore(button))
@@ -181,10 +224,12 @@ public class GameView extends JFrame {
                                         xVal = s.getxLoc();
                                         yVal = s.getyLoc();
                                         value = grid.getValue(xVal, yVal);
-                                        s.setBackground(Color.gray);
-                                        s.setOpaque(true);
-                                        s.setBorderPainted(false);
-                                        s.setText(Integer.toString(value));
+                                        s.setBackground(new Color(200, 200, 200));
+//                                        s.setOpaque(true);
+                                        s.setColor(value);
+//                                        s.setBorderPainted(false);
+//                                        s.setText(Integer.toString(value));
+                                        s.setLabelText(Integer.toString(value));
                                     }
                                 }
                             }
@@ -192,22 +237,7 @@ public class GameView extends JFrame {
                             // If all non minespaces have been explored win condition is met.
                             System.out.println(grid.getExplored().size() + " || " + grid.getExplorableSpacesCount());
 
-                            if(grid.getExplored().size() == grid.getExplorableSpacesCount())
-                            {
-                                grid.setGameOver();
-
-                                System.out.println("you win");
-                                for(Space s : grid.getExplored())
-                                {
-                                    s.setBackground(Color.GREEN);
-                                }
-                                for(Point s : grid.getMineCoordinates())
-                                {
-                                    Space mine = grid.getSpaces().get(s);
-                                    mine.setBackground(Color.gray);
-                                }
-
-                            }
+                            grid.checkWinCondition();
                         }
 
                     }
@@ -232,7 +262,6 @@ public class GameView extends JFrame {
                 add(button, c);
             }
         }
-
     }
 
 }
