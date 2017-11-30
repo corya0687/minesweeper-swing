@@ -22,6 +22,7 @@ public class GameView extends JPanel {
 
     public void newGame(int length, int width, int mines)
     {
+
         grid = new GameGrid(length, width, mines);
 
 
@@ -38,13 +39,10 @@ public class GameView extends JPanel {
                 Space button = new Space();
                 Font newTextFont = new Font(button.getFont().getName(), Font.BOLD, 14);
                 button.setTextFont(newTextFont);
-//                button.setMargin(new Insets(0, 0, 0, 0));
                 button.setLoc(i, j);
-//                button.setPreferredSize(new Dimension(53,40));
-                button.setPreferredSize(new Dimension(40,40));
+                button.setPreferredSize(new Dimension(20,20));
                 button.setBorder(BorderFactory.createLineBorder(Color.gray));
 
-//                button.setMaximumSize(new Dimension(50,50));
                 button.addMouseListener(new MouseListener()
                 {
                     @Override
@@ -76,17 +74,10 @@ public class GameView extends JPanel {
                                         {
                                             if(!grid.isExplored(s) && !s.isFlagged())
                                             {
-//                                                System.out.println(s.getxLoc() +"," +s.getyLoc());
                                                 if(grid.mineAtPoint(s.getxLoc(), s.getyLoc()))
                                                 {
-                                                    int xVal = s.getxLoc();
-                                                    int yVal = s.getyLoc();
                                                     grid.setGameOver();
-                                                    System.out.println("boom");
                                                     s.setBackground(Color.red);
-//                                                    s.setOpaque(true);
-//                                                    s.setBorderPainted(false);
-//                                                    s.setText("*");
                                                     s.setLabelText("*");
                                                 }
                                                 else
@@ -94,17 +85,6 @@ public class GameView extends JPanel {
                                                     grid.explore(s);
                                                 }
                                             }
-//                                            if(grid.isExplored(s))
-//                                            {
-//                                                int xVal = s.getxLoc();
-//                                                int yVal = s.getyLoc();
-//                                                value = grid.getValue(xVal, yVal);
-//                                                s.setBackground(new Color(200, 200, 200));
-//                                                s.setOpaque(true);
-//                                                s.setBorderPainted(false);
-//                                                s.setColor(value);
-//                                                s.setText(Integer.toString(value));
-//                                            }
                                         }
                                         for(Space s : grid.getExplored())
                                         {
@@ -112,10 +92,7 @@ public class GameView extends JPanel {
                                             int yVal = s.getyLoc();
                                             value = grid.getValue(xVal, yVal);
                                             s.setBackground(new Color(200, 200, 200));
-//                                            s.setOpaque(true);
                                             s.setColor(value);
-//                                            s.setBorderPainted(false);
-//                                            s.setText(Integer.toString(value));
                                             s.setLabelText(Integer.toString(value));
                                         }
 
@@ -123,7 +100,6 @@ public class GameView extends JPanel {
 
                                 }
                             }
-                            System.out.println(grid.getExplored().size() + " || " + grid.getExplorableSpacesCount());
                             // did you win?
                             grid.checkWinCondition();
                         }
@@ -148,7 +124,6 @@ public class GameView extends JPanel {
                                 if(button.isFlagged())
                                 {
                                     button.setFlagged(!button.isFlagged());
-//                                    button.setText("");
                                     button.setLabelText("");
                                 }
                                 else
@@ -156,7 +131,6 @@ public class GameView extends JPanel {
                                     button.setFlagged(!button.isFlagged());
                                     // Place holder flag text
                                     // TODO: change later.
-//                                    button.setText("╒");
                                     button.setLabelText("╒");
                                 }
                             }
@@ -173,10 +147,8 @@ public class GameView extends JPanel {
 
                             if(!grid.isGameOver() && !button.isFlagged())
                             {
-//                                System.out.println(button.getxLoc() + "," + button.getyLoc());
                                 int xVal = button.getxLoc();
                                 int yVal = button.getyLoc();
-                                int value = grid.getValue(xVal, yVal);
 
                                 // Game over :(
                                 if(grid.mineAtPoint(xVal, yVal))
@@ -203,32 +175,21 @@ public class GameView extends JPanel {
 
                                     // Update value in map
                                     System.out.println("boom");
-//                                    button.setText("*");
                                     button.setLabelText("*");
                                     button.setBackground(Color.RED);
-//                                    button.setOpaque(true);
-//                                    button.setBorderPainted(false);
                                     Point p = new Point(button.getxLoc(), button.getyLoc());
                                     spaces.put(p, button);
                                 }
                                 else
                                 {
-//                                    button.setBackground(Color.gray);
-//                                    button.setOpaque(true);
-//                                    button.setBorderPainted(false);
-//                                    button.setText(Integer.toString(value));
-
                                     // if 0 explore adjacent spaces until non 0 value is found
                                     for(Space s : grid.explore(button))
                                     {
                                         xVal = s.getxLoc();
                                         yVal = s.getyLoc();
-                                        value = grid.getValue(xVal, yVal);
-                                        s.setBackground(new Color(200, 200, 200));
-//                                        s.setOpaque(true);
+                                        int value = grid.getValue(xVal, yVal);
+                                        s.setBackground(new Color(220, 220, 220));
                                         s.setColor(value);
-//                                        s.setBorderPainted(false);
-//                                        s.setText(Integer.toString(value));
                                         s.setLabelText(Integer.toString(value));
                                     }
                                 }
@@ -256,6 +217,8 @@ public class GameView extends JPanel {
                     }
                 });
 
+
+                // Add space grid mapping at point i,j
                 Point p = new Point(i,j);
                 grid.addSpace(p, button);
 

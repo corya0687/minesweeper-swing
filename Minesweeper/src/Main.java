@@ -18,7 +18,7 @@ public class Main
                 JFrame frame = new JFrame("Test");
                 frame.setLayout(new BorderLayout());
                 GameView game = new GameView();
-                game.newGame(9,9,9);
+                game.newGame(16,30,99);
                 JButton test = new JButton("test");
                 test.addActionListener(new ActionListener()
                 {
