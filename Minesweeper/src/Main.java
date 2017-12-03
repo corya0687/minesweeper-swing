@@ -15,23 +15,23 @@ public class Main
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFrame frame = new JFrame("Test");
-                frame.setLayout(new BorderLayout());
-                GameView game = new GameView();
-                game.newGame(16,30,99);
-                JButton test = new JButton("test");
-                test.addActionListener(new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        frame.remove(game);
-                        game.newGame(9, 9,10);
-                        frame.add(game);
-                    }
-                });
-                frame.add(test, BorderLayout.NORTH);
-                frame.add(game);
+                JFrame frame = new GameGUI("Test");
+//                frame.setLayout(new BorderLayout());
+//                GameView game = new GameView();
+//                game.newGame(9,9,10);
+//                JButton test = new JButton("test");
+//                test.addActionListener(new ActionListener()
+//                {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e)
+//                    {
+//                        frame.remove(game);
+//                        game.newGame(9, 9,10);
+//                        frame.add(game);
+//                    }
+//                });
+//                frame.add(test, BorderLayout.NORTH);
+//                frame.add(game);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(600,600);
 //                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
