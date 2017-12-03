@@ -117,21 +117,21 @@ public class GameView extends JPanel {
                     @Override
                     public void mouseReleased(MouseEvent e)
                     {
+                        // if right click or mac right click
                         if(SwingUtilities.isRightMouseButton(e) || e.getButton() == 3)
                         {
                             if(!grid.isGameOver())
                             {
-                                if(button.isFlagged())
-                                {
-                                    button.setFlagged(!button.isFlagged());
-                                    button.setLabelText("");
-                                }
-                                else
-                                {
-                                    button.setFlagged(!button.isFlagged());
-                                    // Place holder flag text
-                                    // TODO: change later.
-                                    button.setLabelText("╒");
+                                if(!grid.isExplored(button)) {
+                                    if (button.isFlagged()) {
+                                        button.setFlagged(!button.isFlagged());
+                                        button.setLabelText("");
+                                    } else {
+                                        button.setFlagged(!button.isFlagged());
+                                        // Place holder flag text
+                                        // TODO: change later.
+                                        button.setLabelText("╒");
+                                    }
                                 }
                             }
                         }
