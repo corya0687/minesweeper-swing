@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
@@ -55,7 +53,7 @@ public class GameView extends JPanel {
                         // Explores all non flagged spaces
                         // Double click checker from: https://stackoverflow.com/a/18990721
                         if (isAlreadyOneClick) {
-                            System.out.println("double clicked");
+//                            System.out.println("double clicked");
                             int xLoc = button.getxLoc();
                             int yLoc = button.getyLoc();
                             int value = grid.getValue(xLoc, yLoc);
