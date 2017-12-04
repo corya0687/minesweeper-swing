@@ -16,31 +16,11 @@ public class Main
             @Override
             public void run() {
                 JFrame frame = new GameGUI("Test");
-//                frame.setLayout(new BorderLayout());
-//                GameView game = new GameView();
-//                game.newGame(9,9,10);
-//                JButton test = new JButton("test");
-//                test.addActionListener(new ActionListener()
-//                {
-//                    @Override
-//                    public void actionPerformed(ActionEvent e)
-//                    {
-//                        frame.remove(game);
-//                        game.newGame(9, 9,10);
-//                        frame.add(game);
-//                    }
-//                });
-//                frame.add(test, BorderLayout.NORTH);
-//                frame.add(game);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600,600);
-//                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                frame.setSize(600,300);
+                frame.setSize(225, 325);
+
                 frame.setVisible(true);
 //                frame.pack();
-//                JFrame frame = new GameView("Program 1");
-//                frame.pack();
-//                frame.setVisible(true);
             }
         });
 

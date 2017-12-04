@@ -21,6 +21,8 @@ public class Space extends JPanel
         add(label, BorderLayout.CENTER);
     }
 
+
+
     public void setLabelText(String label)
     {
         this.label.setText(label);

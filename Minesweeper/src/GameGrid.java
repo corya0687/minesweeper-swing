@@ -20,7 +20,7 @@ public class GameGrid extends JPanel {
     private Hashtable<Point, Space> spaces;
     private HashSet<Space> explored;
     private HashSet<Space> flagged;
-    private Time start, end;
+    private long start, end;
 
 
     public GameGrid(int width, int length, int mineCount)
@@ -33,6 +33,7 @@ public class GameGrid extends JPanel {
         this.gameOver = false;
         this.spaces = new Hashtable<>();
         this.explored = new HashSet<>();
+        this.flagged = new HashSet<>();
 
 
         for(int i = 0; i < width; i++)
@@ -89,7 +90,22 @@ public class GameGrid extends JPanel {
         return 10;
     }
 
+    public void addToFlagged(Space space)
+    {
+        flagged.add(space);
+    }
 
+    public void removeFromFlagged(Space space)
+    {
+        if(flagged.contains(space))
+        {
+            flagged.remove(space);
+        }
+    }
+
+    public HashSet<Space> getFlagged() {
+        return flagged;
+    }
 
     public int getLength()
     {
@@ -285,13 +301,8 @@ public class GameGrid extends JPanel {
         int pointY = startPoint.getyLoc();
         int xDir, yDir;
 
-        if(explored.contains(startPoint))
+        if(explored.contains(startPoint) || startPoint.isFlagged())
         {
-            if(getValue(startPoint.getxLoc(), startPoint.getyLoc()) == 0)
-            {
-                System.out.println(startPoint.getxLoc() +"," +startPoint.getyLoc());
-                System.out.println(getValue(startPoint.getxLoc(), startPoint.getyLoc()));
-            }
             return explored;
         }
         else
@@ -472,13 +483,14 @@ public class GameGrid extends JPanel {
         return false;
     }
 
-    public void checkWinCondition()
+    public boolean checkWinCondition()
     {
         if(getExplored().size() == getExplorableSpacesCount())
         {
+            setEnd();
             setGameOver();
 
-            System.out.println("you win");
+//            System.out.println("you win");
             for(Space s : getExplored())
             {
                 s.setBackground(Color.GREEN);
@@ -489,8 +501,50 @@ public class GameGrid extends JPanel {
                 mine.setBackground(Color.gray);
                 mine.setLabelText("*");
             }
-
+            JOptionPane.showMessageDialog(null,"You Win!\n" +
+                    "Time: " +
+                    getTime() +
+                    "Seconds!");
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
+    public void handleLoss(Space s)
+    {
+        setGameOver();
+        Hashtable<Point, Space> spaces = getSpaces();
+        for(Point p : getMineCoordinates())
+        {
+            Space mine = spaces.get(p);
+            if(!mine.isFlagged())
+            {
+//                System.out.println("boom");
+                mine.setLabelText("*");
+                mine.setBackground(Color.pink);
+            }
+            // Update values in map
+            spaces.put(p, mine);
+        }
+        s.setBackground(Color.red);
+        s.setLabelText("*");
+    }
+
+    public void setStart() {
+        this.start = System.currentTimeMillis();
+
+    }
+
+    public void setEnd() {
+        this.end = System.currentTimeMillis();
+    }
+
+    public double getTime()
+    {
+        double millis = this.end - this.start;
+        return millis/1000;
+    }
 }

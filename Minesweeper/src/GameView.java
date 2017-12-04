@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.*;
+import java.util.Timer;
 
 /**
  * Created by keeferbibby on 11/7/17.
@@ -13,6 +13,9 @@ import java.util.Hashtable;
 public class GameView extends JPanel {
 
     private GameGrid grid;
+    private Set<Space> revealed;
+    private boolean isAlreadyOneClick;
+
 
     public GameView()
     {
@@ -24,7 +27,7 @@ public class GameView extends JPanel {
     {
 
         grid = new GameGrid(length, width, mines);
-
+        revealed = new HashSet<>();
 
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -50,7 +53,8 @@ public class GameView extends JPanel {
                     {
                         // Double click to explore if value of button == adjacent flagged spaces
                         // Explores all non flagged spaces
-                        if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+                        // Double click checker from: https://stackoverflow.com/a/18990721
+                        if (isAlreadyOneClick) {
                             System.out.println("double clicked");
                             int xLoc = button.getxLoc();
                             int yLoc = button.getyLoc();
@@ -74,26 +78,33 @@ public class GameView extends JPanel {
                                         {
                                             if(!grid.isExplored(s) && !s.isFlagged())
                                             {
-                                                if(grid.mineAtPoint(s.getxLoc(), s.getyLoc()))
-                                                {
-                                                    grid.setGameOver();
-                                                    s.setBackground(Color.red);
-                                                    s.setLabelText("*");
-                                                }
-                                                else
-                                                {
-                                                    grid.explore(s);
+                                                if(!grid.isGameOver()) {
+                                                    if (grid.mineAtPoint(s.getxLoc(), s.getyLoc())) {
+                                                        // You lose
+                                                        grid.handleLoss(s);
+                                                        JOptionPane.showMessageDialog(null, "Boom! You Lose :(");
+                                                    } else {
+                                                        grid.explore(s);
+                                                    }
                                                 }
                                             }
                                         }
+
                                         for(Space s : grid.getExplored())
                                         {
-                                            int xVal = s.getxLoc();
-                                            int yVal = s.getyLoc();
-                                            value = grid.getValue(xVal, yVal);
-                                            s.setBackground(new Color(200, 200, 200));
-                                            s.setColor(value);
-                                            s.setLabelText(Integer.toString(value));
+                                            if(!revealed.contains(s)) {
+                                                int xVal = s.getxLoc();
+                                                int yVal = s.getyLoc();
+                                                value = grid.getValue(xVal, yVal);
+                                                s.setBackground(new Color(200, 200, 200));
+                                                s.setColor(value);
+                                                if (value == 0) {
+                                                    s.setLabelText("");
+                                                } else {
+                                                    s.setLabelText(Integer.toString(value));
+                                                }
+                                                revealed.add(s);
+                                            }
                                         }
 
                                     }
@@ -102,6 +113,21 @@ public class GameView extends JPanel {
                             }
                             // did you win?
                             grid.checkWinCondition();
+                            isAlreadyOneClick = false;
+                        } else {
+                            isAlreadyOneClick = true;
+                            Timer t = new Timer("doubleclickTimer", false);
+                            t.schedule(new TimerTask() {
+
+                                @Override
+                                public void run() {
+                                    isAlreadyOneClick = false;
+                                }
+                            }, 1000);
+                        }
+                        if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+
+
                         }
 
                     }
@@ -126,11 +152,13 @@ public class GameView extends JPanel {
                                     if (button.isFlagged()) {
                                         button.setFlagged(!button.isFlagged());
                                         button.setLabelText("");
+                                        grid.removeFromFlagged(button);
                                     } else {
                                         button.setFlagged(!button.isFlagged());
                                         // Place holder flag text
-                                        // TODO: change later.
-                                        button.setLabelText("╒");
+                                        // TODO: change later to an image
+                                        button.setLabelText("A");
+                                        grid.addToFlagged(button);
                                     }
                                 }
                             }
@@ -143,54 +171,36 @@ public class GameView extends JPanel {
                             {
                                 Point p = new Point(button.getxLoc(),button.getyLoc());
                                 grid.generateMines(p);
+                                grid.setStart();
                             }
 
-                            if(!grid.isGameOver() && !button.isFlagged())
+                            if(!grid.isGameOver() && (!button.isFlagged() && !grid.getExplored().contains(button)))
                             {
                                 int xVal = button.getxLoc();
                                 int yVal = button.getyLoc();
 
                                 // Game over :(
-                                if(grid.mineAtPoint(xVal, yVal))
-                                {
-                                    grid.setGameOver();
-
-                                    // Game is over show all mine locations
-                                    Hashtable<Point, Space> spaces = grid.getSpaces();
-                                    for(Point p : grid.getMineCoordinates())
-                                    {
-                                        Space mine = spaces.get(p);
-                                        if(!mine.isFlagged())
-                                        {
-                                            System.out.println("boom");
-//                                            mine.setText("*");
-                                            mine.setLabelText("*");
-                                            mine.setBackground(Color.pink);
-//                                            mine.setOpaque(true);
-//                                            mine.setBorderPainted(false);
-                                        }
-                                        // Update values in map
-                                        spaces.put(p, mine);
-                                    }
-
-                                    // Update value in map
-                                    System.out.println("boom");
-                                    button.setLabelText("*");
-                                    button.setBackground(Color.RED);
-                                    Point p = new Point(button.getxLoc(), button.getyLoc());
-                                    spaces.put(p, button);
+                                if(grid.mineAtPoint(xVal, yVal)) {
+                                    grid.handleLoss(button);
                                 }
                                 else
                                 {
                                     // if 0 explore adjacent spaces until non 0 value is found
                                     for(Space s : grid.explore(button))
                                     {
-                                        xVal = s.getxLoc();
-                                        yVal = s.getyLoc();
-                                        int value = grid.getValue(xVal, yVal);
-                                        s.setBackground(new Color(220, 220, 220));
-                                        s.setColor(value);
-                                        s.setLabelText(Integer.toString(value));
+                                        if(!revealed.contains(s)) {
+                                            xVal = s.getxLoc();
+                                            yVal = s.getyLoc();
+                                            int value = grid.getValue(xVal, yVal);
+                                            s.setBackground(new Color(220, 220, 220));
+                                            s.setColor(value);
+                                            if (value == 0) {
+                                                s.setLabelText("");
+                                            } else {
+                                                s.setLabelText(Integer.toString(value));
+                                            }
+                                            revealed.add(s);
+                                        }
                                     }
                                 }
                             }
@@ -199,6 +209,7 @@ public class GameView extends JPanel {
                             System.out.println(grid.getExplored().size() + " || " + grid.getExplorableSpacesCount());
 
                             grid.checkWinCondition();
+
                         }
 
                     }
@@ -225,6 +236,11 @@ public class GameView extends JPanel {
                 add(button, c);
             }
         }
+    }
+
+    public GameGrid getGrid()
+    {
+        return this.grid;
     }
 
 }
