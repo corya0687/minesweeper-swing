@@ -54,59 +54,70 @@ public class GameView extends JPanel {
                         // Double click checker from: https://stackoverflow.com/a/18990721
                         if (isAlreadyOneClick) {
 //                            System.out.println("double clicked");
-                            int xLoc = button.getxLoc();
-                            int yLoc = button.getyLoc();
-                            int value = grid.getValue(xLoc, yLoc);
-                            if(grid.isExplored(button))
+                            if(e.getButton() == MouseEvent.BUTTON1)
                             {
-                                if(value >= 0)
+                                int xLoc = button.getxLoc();
+                                int yLoc = button.getyLoc();
+                                int value = grid.getValue(xLoc, yLoc);
+                                if (grid.isExplored(button))
                                 {
-                                    int adjacentFlagCount = 0;
-                                    ArrayList<Space> adjacentSpaces = grid.getAdjacentSpaces(button);
-                                    for(Space s : adjacentSpaces)
+                                    if (value >= 0)
                                     {
-                                        if(s.isFlagged())
+                                        int adjacentFlagCount = 0;
+                                        ArrayList<Space> adjacentSpaces = grid.getAdjacentSpaces(button);
+                                        for (Space s : adjacentSpaces)
                                         {
-                                            adjacentFlagCount++;
-                                        }
-                                    }
-                                    if(adjacentFlagCount == value)
-                                    {
-                                        for(Space s : adjacentSpaces)
-                                        {
-                                            if(!grid.isExplored(s) && !s.isFlagged())
+                                            if (s.isFlagged())
                                             {
-                                                if(!grid.isGameOver()) {
-                                                    if (grid.mineAtPoint(s.getxLoc(), s.getyLoc())) {
-                                                        // You lose
-                                                        grid.handleLoss(s);
-                                                        JOptionPane.showMessageDialog(null, "Boom! You Lose :(");
-                                                    } else {
-                                                        grid.explore(s);
+                                                adjacentFlagCount++;
+                                            }
+                                        }
+                                        if (adjacentFlagCount == value)
+                                        {
+                                            for (Space s : adjacentSpaces)
+                                            {
+                                                if (!grid.isExplored(s) && !s.isFlagged())
+                                                {
+                                                    if (!grid.isGameOver())
+                                                    {
+                                                        if (grid.mineAtPoint(s.getxLoc(), s.getyLoc()))
+                                                        {
+                                                            // You lose
+                                                            grid.handleLoss(s);
+                                                            JOptionPane.showMessageDialog(null, "Boom! You Lose :(");
+                                                        }
+                                                        else
+                                                        {
+                                                            grid.explore(s);
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
 
-                                        for(Space s : grid.getExplored())
-                                        {
-                                            if(!revealed.contains(s)) {
-                                                int xVal = s.getxLoc();
-                                                int yVal = s.getyLoc();
-                                                value = grid.getValue(xVal, yVal);
-                                                s.setBackground(new Color(200, 200, 200));
-                                                s.setColor(value);
-                                                if (value == 0) {
-                                                    s.setLabelText("");
-                                                } else {
-                                                    s.setLabelText(Integer.toString(value));
+                                            for (Space s : grid.getExplored())
+                                            {
+                                                if (!revealed.contains(s))
+                                                {
+                                                    int xVal = s.getxLoc();
+                                                    int yVal = s.getyLoc();
+                                                    value = grid.getValue(xVal, yVal);
+                                                    s.setBackground(new Color(200, 200, 200));
+                                                    s.setColor(value);
+                                                    if (value == 0)
+                                                    {
+                                                        s.setLabelText("");
+                                                    }
+                                                    else
+                                                    {
+                                                        s.setLabelText(Integer.toString(value));
+                                                    }
+                                                    revealed.add(s);
                                                 }
-                                                revealed.add(s);
                                             }
+
                                         }
 
                                     }
-
                                 }
                             }
                             // did you win?
@@ -123,11 +134,6 @@ public class GameView extends JPanel {
                                 }
                             }, 1000);
                         }
-                        if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
-
-
-                        }
-
                     }
 
 
@@ -155,8 +161,9 @@ public class GameView extends JPanel {
                                         button.setFlagged(!button.isFlagged());
                                         // Place holder flag text
                                         // TODO: change later to an image
-                                        button.setLabelText("A");
+                                        button.setLabelText("⚑");
                                         grid.addToFlagged(button);
+
                                     }
                                 }
                             }
@@ -190,7 +197,7 @@ public class GameView extends JPanel {
                                             xVal = s.getxLoc();
                                             yVal = s.getyLoc();
                                             int value = grid.getValue(xVal, yVal);
-                                            s.setBackground(new Color(220, 220, 220));
+                                            s.setBackground(new Color(200, 200, 200));
                                             s.setColor(value);
                                             if (value == 0) {
                                                 s.setLabelText("");
